@@ -68,13 +68,13 @@
       <label for="category">Select Category:</label>
       <select id="category">
         <option value="">-- Select Category --</option>
-        <option value="beers">CHAMPAGNE & WINE</option>
-        <option value="menu">SPIRITS</option>
-        <option value="seafood">NON ALCOHOLIC</option>
-        <option value="salads">BEER & CIDER</option>
-        <option value="spirits">APPETIZERS</option>
-        <option value="md">MAIN DISHES</option>
-  <option value="desserts">DESSERTS</option>
+        <option value="beers">APPETIZERS</option>
+        <option value="menu">MAIN</option>
+        <option value="seafood">DESSERTS</option>
+        <option value="salads">WINE</option>
+        <option value="spirits">SPIRITS</option>
+        <option value="md">NON ALCOHOLIC</option>
+  <option value="desserts">BEER AND CIDER</option>
       </select>
     </div>
     <div class="form-group">
@@ -104,51 +104,54 @@
     // Menu Data
    const menu = {
   beers: [
-{ name: "Champ' Louis Roederer", price: 1200 },
-{ name: "Dom Perignon Vintage", price: 2500 },
-{ name: "Red Hudelot-Baillet", price: 1100 },
-{ name: "Red Pingus", price: 2900 },
-{ name: "White Leflaive", price: 1900 },
-{ name: "Margaux Single Cask Gin", price: 1100 },
-{ name: "White JJ Girard", price: 1000 },
+{ name: "Glacier Point Oyster", price: 1400 },
+{ name: "Osetra imperial Caviar", price: 2600 },
+{ name: "King cocktail", price: 1600 },
+{ name: "Acacia honey salad", price: 1200 },
+{ name: "Tuber Pate", price: 1900 },
+{ name: "pan’or Lobster Roll", price: 2000 },
   ],
   menu: [
+{ name: "Tropical Lobster Thermidor", price: 3800 },
+{ name: "Snow Crab Linguine", price: 3300 },
+{ name: "Sushi Platter", price: 2900 },
+{ name: "Carabineros Shrimp", price: 2400 },
+{ name: "Tuber Risotto", price: 2100 },
+  ],
+  seafood: [
+  { name: "Royale’ Sorbet", price: 1100 },
+{ name: "Del Cheesecake", price: 1500 },
+{ name: "Dom Perignon Wine", price: 1300 },
+{ name: "Golden Brownie", price: 2200 },
+  ],
+  salads: [
+{ name: "Champ’ Louis Roederer", price: 1200 },
+{ name: "Dom Perignon Vintage", price: 2500 },
+{ name: "Red HUDELOT-BAILLET", price: 1100 },
+{ name: "Red Pingus", price: 2900 },
+{ name: "White LEFLAIVE", price: 1900 },
+{ name: "White JJ GIRARD", price: 1000 },
+  ],
+  spirits: [
 { name: "Bourbon Buffalo Trace", price: 2700 },
 { name: "El Dorado Rum", price: 1300 },
 { name: "Rey Sol Tequila", price: 1500 },
 { name: "Buffalo Trace Clix Vodka", price: 1400 },
-  ],
-  seafood: [
-  { name: "Non Alcoholic Selection", price: 600 },
-  ],
-  salads: [
-{ name: "Westvleteren 12", price: 1100 },
-{ name: "Little Pomona Harvest", price: 1000 },
-{ name: "Cable Car Kriek", price: 1200 },
-{ name: "Henney's Dry", price: 900 },
-  ],
-  spirits: [
-{ name: "Escado", price: null },
-{ name: "Roje", price: null },
+{ name: "Margaux Single Cask Gin", price: 1100 },
   ],
        md: [
-{ name: "Glacier Point Oyster", price: 1400 },
-{ name: "Tropical Lobster Thermidor", price: 3800 },
-{ name: "Osetra Imperial Caviar", price: 2600 },
-{ name: "Snow Crab Linguine", price: 3300 },
-{ name: "King Cocktail", price: 1600 },
-{ name: "Sushi Platter", price: 2900 },
-{ name: "Acacia Honey Salad", price: 1200 },
-{ name: "Carabineros Shrimp", price: 2400 },
-{ name: "Tuber Pate", price: 1900 },
-{ name: "Tuber Risotto", price: 2100 },
-{ name: "Pan'or Lobster Roll", price: 2000 },
+{ name: "Tea", price: 600 },
+{ name: "Coffee", price: 600 },
+{ name: "Hot Chocolate", price: 600 },
+{ name: "Orange Juice", price: 600 },
+{ name: "Cola", price: 600 },
+{ name: "Lemonade", price: 600 },
   ],
       desserts: [
-{ name: "Royale' Sorbet", price: 1100 },
-{ name: "Dom Perignon Wine", price: 1300 },
-{ name: "Del Cheesecake", price: null },
-{ name: "Golden Brownie", price: 2200 },
+{ name: "Westvleteren 12", price: 1100 },
+{ name: "Cable Car Kriek", price: 1200 },
+{ name: "Little Pomona Harvest", price: 1000 },
+{ name: "Henney's Dry", price: 900 },
   ]
 };
 
