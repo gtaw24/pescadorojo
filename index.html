@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Input Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group select, .form-group input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .table-container {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .table-container h3 {
+      margin-top: 0;
+    }
+    .table-container button {
+      margin-right: 10px;
+    }
+    .add-more {
+      margin-top: 10px;
+    }
+    .selected-items {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .selected-items h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Restaurant Input Form</h2>
+    <div class="form-group">
+      <label for="your-name">Your Name:</label>
+      <input type="text" id="your-name" placeholder="Enter your name">
+    </div>
+    <div class="form-group">
+      <label for="in-game-name">In Game Name:</label>
+      <input type="text" id="in-game-name" placeholder="Enter in-game name">
+    </div>
+
+    <!-- Menu Dropdowns -->
+    <div class="form-group">
+      <label for="category">Select Category:</label>
+      <select id="category">
+        <option value="">-- Select Category --</option>
+        <option value="beers">CHAMPAGNE & WINE</option>
+        <option value="menu">SPIRITS</option>
+        <option value="seafood">NON ALCOHOLIC</option>
+        <option value="salads">BEER & CIDER</option>
+        <option value="spirits">APPETIZERS</option>
+        <option value="md">MAIN DISHES</option>
+  <option value="desserts">DESSERTS</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="item">Select Item:</label>
+      <select id="item">
+        <option value="">-- Select Item --</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" min="1" value="1">
+    </div>
+    <button class="add-more" id="add-more">Add More</button>
+    <button id="add-table">Add Table</button>
+
+    <!-- Display Selected Items Before Adding Table -->
+    <div class="selected-items">
+      <h3>Selected Items</h3>
+      <ul id="selected-items-list"></ul>
+    </div>
+
+    <!-- Display Tables -->
+    <div id="tables-container"></div>
+  </div>
+
+  <script>
+    // Menu Data
+   const menu = {
+  beers: [
+{ name: "Champ' Louis Roederer", price: null },
+{ name: "Dom Perignon Vintage", price: null },
+{ name: "Red Hudelot-Baillet", price: null },
+{ name: "Red Pingus", price: null },
+{ name: "White Leflaive", price: 1900 },
+{ name: "Margaux Single Cask Gin", price: 1100 },
+{ name: "White JJ Girard", price: 1000 },
+  ],
+  menu: [
+{ name: "Bourbon Buffalo Trace", price: 2700 },
+{ name: "El Dorado Rum", price: 1300 },
+{ name: "Rey Sol Tequila", price: 1500 },
+{ name: "Buffalo Trace Clix Vodka", price: 1400 },
+  ],
+  seafood: [
+  { name: "Non Alcoholic Selection", price: 600 },
+  ],
+  salads: [
+{ name: "Westvleteren 12", price: 1100 },
+{ name: "Little Pomona Harvest", price: 1000 },
+{ name: "Cable Car Kriek", price: 1200 },
+{ name: "Henney's Dry", price: 900 },
+  ],
+  spirits: [
+{ name: "Escado", price: null },
+{ name: "Roje", price: null },
+  ],
+       md: [
+{ name: "Glacier Point Oyster", price: 1400 },
+{ name: "Tropical Lobster Thermidor", price: 3800 },
+{ name: "Osetra Imperial Caviar", price: 2600 },
+{ name: "Snow Crab Linguine", price: 3300 },
+{ name: "King Cocktail", price: 1600 },
+{ name: "Sushi Platter", price: 2900 },
+{ name: "Acacia Honey Salad", price: 1200 },
+{ name: "Carabineros Shrimp", price: 2400 },
+{ name: "Tuber Pate", price: 1900 },
+{ name: "Tuber Risotto", price: 2100 },
+{ name: "Pan'or Lobster Roll", price: 2000 },
+  ],
+      desserts: [
+{ name: "Royale' Sorbet", price: 1100 },
+{ name: "Dom Perignon Wine", price: 1300 },
+{ name: "Del Cheesecake", price: null },
+{ name: "Golden Brownie", price: 2200 },
+  ]
+};
+
+
+    // Variables
+    let selectedItems = [];
+    let tableCount = 1;
+
+    // DOM Elements
+    const categorySelect = document.getElementById("category");
+    const itemSelect = document.getElementById("item");
+    const quantityInput = document.getElementById("quantity");
+    const addMoreButton = document.getElementById("add-more");
+    const addTableButton = document.getElementById("add-table");
+    const selectedItemsList = document.getElementById("selected-items-list");
+    const tablesContainer = document.getElementById("tables-container");
+
+    // Event Listeners
+    categorySelect.addEventListener("change", populateItems);
+    addMoreButton.addEventListener("click", addItem);
+    addTableButton.addEventListener("click", addTable);
+
+    // Functions
+    function populateItems() {
+      const category = categorySelect.value;
+      itemSelect.innerHTML = '<option value="">-- Select Item --</option>';
+      if (category) {
+        menu[category].forEach(item => {
+          const option = document.createElement("option");
+          option.value = item.name;
+          option.textContent = `${item.name} - $${item.price}`;
+          itemSelect.appendChild(option);
+        });
+      }
+    }
+
+    function addItem() {
+      const category = categorySelect.value;
+      const itemName = itemSelect.value;
+      const quantity = parseInt(quantityInput.value);
+      if (category && itemName && quantity > 0) {
+        const item = menu[category].find(i => i.name === itemName);
+        selectedItems.push({ ...item, quantity });
+        updateSelectedItemsList();
+      } else {
+        alert("Please select a category, item, and quantity.");
+      }
+    }
+
+    function updateSelectedItemsList() {
+      selectedItemsList.innerHTML = selectedItems
+        .map(item => `<li>${item.name} (x${item.quantity}) - $${item.price * item.quantity}</li>`)
+        .join("");
+    }
+
+    function addTable() {
+      if (selectedItems.length === 0) {
+        alert("Please add at least one item.");
+        return;
+      }
+
+      const yourName = document.getElementById("your-name").value;
+      const inGameName = document.getElementById("in-game-name").value;
+
+      // Calculate total price
+      const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      // Create table display
+      const tableDiv = document.createElement("div");
+      tableDiv.className = "table-container";
+      tableDiv.innerHTML = `
+        <h3>Table ${tableCount}</h3>
+        <p><strong>Your Name:</strong> ${yourName}</p>
+        <p><strong>In Game Name:</strong> ${inGameName}</p>
+        <ul>
+          ${selectedItems.map(item => `<li>${item.name} (x${item.quantity}) - $${item.price * item.quantity}</li>`).join("")}
+        </ul>
+        <p><strong>Total:</strong> $${totalPrice}</p>
+        <button onclick="finalizeTable(${tableCount}, this)">Close Table</button>
+        <button onclick="closeTableMissclick(${tableCount}, '${yourName}', this)">Close Table (Missclick)</button>
+      `;
+      tablesContainer.appendChild(tableDiv);
+
+      // Send results to Discord webhook for "Add Table" (as embed)
+      sendToDiscordWebhook(
+        "1371407808435720204/UGz-qCVJXdldyQJ_vEaWmaBp2O24DEU2SQ83Z4zb-Xr4AyLgPGb9ue81cX_CFnqQPByk",
+        {
+          embeds: [
+            {
+              title: `Table ${tableCount} Created`,
+              description: `**Your Name:** ${yourName}\n**In Game Name:** ${inGameName}`,
+              fields: [
+                {
+                  name: "Items",
+                  value: selectedItems.map(item => `${item.name} (x${item.quantity}) - $${item.price * item.quantity}`).join("\n"),
+                },
+                {
+                  name: "Total",
+                  value: `$${totalPrice}`,
+                },
+              ],
+              color: 0x00ff00, // Green color
+            },
+          ],
+        }
+      );
+
+      // Reset fields
+      selectedItems = [];
+      updateSelectedItemsList();
+      document.getElementById("in-game-name").value = "";
+      categorySelect.value = "";
+      itemSelect.innerHTML = '<option value="">-- Select Item --</option>';
+      quantityInput.value = 1;
+
+      tableCount++;
+    }
+
+    function finalizeTable(tableNumber, button) {
+      const tableDiv = button.parentElement;
+      const yourName = document.getElementById("your-name").value;
+
+      // Send results to Discord webhook for "Close Table" (as embed)
+      sendToDiscordWebhook(
+        "1371408011226251356/206OB7O5vaRo2d6WeMAjKoHH5uIDc6aD6cBQfT5-jOKa94uCMK9mZBIrWFM85eH1hdar",
+        {
+          embeds: [
+            {
+              title: `Table ${tableNumber} Closed`,
+              description: `**Your Name:** ${yourName}\n**Status:** ORDER HAS BEEN PAID`,
+              fields: [
+                {
+                  name: "Items",
+                  value: Array.from(tableDiv.querySelectorAll("li")).map(li => li.textContent).join("\n"),
+                },
+              ],
+              color: 0xffa500, // Orange color
+            },
+          ],
+        }
+      );
+
+      // Remove the table display
+      tableDiv.remove();
+    }
+
+    function closeTableMissclick(tableNumber, yourName, button) {
+      const tableDiv = button.parentElement;
+
+      // Send results to Discord webhook for "Close Table (Missclick)" (as embed)
+      sendToDiscordWebhook(
+        "1371408011226251356/206OB7O5vaRo2d6WeMAjKoHH5uIDc6aD6cBQfT5-jOKa94uCMK9mZBIrWFM85eH1hdar",
+        {
+          embeds: [
+            {
+              title: `Table ${tableNumber} Closed (Missclick)`,
+              description: `**Your Name:** ${yourName}\n**Status:** Table closed due to missclick.`,
+              color: 0xff0000, // Red color
+            },
+          ],
+        }
+      );
+
+      // Send additional message to the first webhook (kitchen order canceled)
+      sendToDiscordWebhook(
+        "1371408011226251356/206OB7O5vaRo2d6WeMAjKoHH5uIDc6aD6cBQfT5-jOKa94uCMK9mZBIrWFM85eH1hdar",
+        {
+          embeds: [
+            {
+              title: `Kitchen Order Canceled`,
+              description: `**Table ${tableNumber}** was closed due to a missclick by **${yourName}**.`,
+              fields: [
+                {
+                  name: "Items",
+                  value: Array.from(tableDiv.querySelectorAll("li")).map(li => li.textContent).join("\n"),
+                },
+              ],
+              color: 0xff0000, // Red color
+            },
+          ],
+        }
+      );
+
+      // Remove the table display
+      tableDiv.remove();
+    }
+
+    function sendToDiscordWebhook(webhookPath, data) {
+      const webhookURL = `https://discord.com/api/webhooks/${webhookPath}`;
+
+      fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+        .then(response => {
+          if (!response.ok) {
+            console.error("Failed to send message to Discord:", response.status, response.statusText);
+          } else {
+            console.log("Message sent to Discord successfully!");
+          }
+        })
+        .catch(error => {
+          console.error("Error sending message to Discord:", error);
+        });
+    }
+  </script>
+</body>
+</html>
